@@ -1,0 +1,1091 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "明河（MingHe）门户系统后端的 API 文档",
+        "title": "明河（MingHe）门户系统后端",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
+    },
+    "basePath": "/",
+    "paths": {
+        "/health": {
+            "get": {
+                "description": "检查服务及其依赖组件的健康状态",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "健康检查",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "是否返回详细信息",
+                        "name": "detailed",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/info": {
+            "get": {
+                "description": "获取服务当前状态和系统信息",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/live": {
+            "get": {
+                "description": "检查服务是否正在运行",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "存活检查",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/ready": {
+            "get": {
+                "description": "检查服务是否准备好接收流量",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "就绪检查",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ginx.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/enterprises/join": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "企业"
+                ],
+                "summary": "用户加入企业",
+                "parameters": [
+                    {
+                        "description": "用户加入企业参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.PostJoinEnterpriseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户加入企业成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/enterprises/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "企业"
+                ],
+                "summary": "获取指定园区的企业列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "园区ID",
+                        "name": "park_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "企业类型（1：企业，2：学院）",
+                        "name": "type",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "类目",
+                        "name": "category",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数据量",
+                        "name": "size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "获取指定园区的企业列表成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.EnterpriseList"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/enterprises/{enterprise_id}/detail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "企业"
+                ],
+                "summary": "查询企业详情",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "企业ID",
+                        "name": "enterprise_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "查询企业详情成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.EnterpriseItem"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/check/deactivate/detail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "查询用户注销准入评估结果接口",
+                "responses": {
+                    "200": {
+                        "description": "查询用户注销准入评估结果成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.DetailDeactivateUserCheckResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/deactivate": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户注销接口",
+                "responses": {
+                    "200": {
+                        "description": "用户注销成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.DetailDeactivateUserCheckResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/detail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "查询用户详情接口",
+                "responses": {
+                    "200": {
+                        "description": "查询用户详情成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.UserItem"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/enterprises/list": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "查询用户入驻的企业列表",
+                "responses": {
+                    "200": {
+                        "description": "获取用户入驻的企业列表成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/types.EnterpriseItem"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户登录接口",
+                "parameters": [
+                    {
+                        "description": "用户登录请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UserLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "登录成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.UserLoginResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/login/code/send": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "发送登录短信验证码",
+                "parameters": [
+                    {
+                        "description": "参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.PostSendSMSCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "短信验证码发送成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/logout": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户登出接口",
+                "responses": {
+                    "200": {
+                        "description": "登出成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户注册接口",
+                "parameters": [
+                    {
+                        "description": "用户注册请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UserRegisterReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户注册成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/types.UserLoginResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/register/code/send": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "发送注册短信验证码",
+                "parameters": [
+                    {
+                        "description": "参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.PostSendSMSCodeReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "短信验证码发送成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/v1/users/verification": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户实名认证",
+                "parameters": [
+                    {
+                        "description": "用户注册请求参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/types.UserVerificationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户实名认证成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/ginx.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "ginx.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {},
+                "msg": {
+                    "type": "string"
+                },
+                "request_id": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "integer"
+                }
+            }
+        },
+        "types.DetailDeactivateUserCheckResp": {
+            "type": "object",
+            "properties": {
+                "can_deactivate": {
+                    "description": "是否允许注销",
+                    "type": "boolean"
+                },
+                "items": {
+                    "description": "未通过的指标列表，每个字符串表示一个未通过的指标key",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "types.EnterpriseItem": {
+            "type": "object",
+            "properties": {
+                "category": {
+                    "description": "类目",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "contact": {
+                    "description": "类型方式",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "企业简介",
+                    "type": "string"
+                },
+                "full_name": {
+                    "description": "企业全称",
+                    "type": "string"
+                },
+                "icon": {
+                    "description": "企业icon",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "企业ID",
+                    "type": "integer"
+                },
+                "images": {
+                    "description": "背景图片",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "labels": {
+                    "description": "标签",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "lease_time": {
+                    "description": "时间",
+                    "type": "string"
+                },
+                "short_name": {
+                    "description": "企业简称",
+                    "type": "string"
+                },
+                "top": {
+                    "description": "是否置顶",
+                    "type": "integer"
+                },
+                "type": {
+                    "description": "企业类型，（1：企业，2：学院）",
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "description": "修改时间",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "企业官网",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "types.EnterpriseList": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.EnterpriseItem"
+                    }
+                }
+            }
+        },
+        "types.PostJoinEnterpriseReq": {
+            "type": "object",
+            "required": [
+                "code",
+                "enterprise_id"
+            ],
+            "properties": {
+                "code": {
+                    "description": "企业入驻码",
+                    "type": "string"
+                },
+                "enterprise_id": {
+                    "description": "企业ID",
+                    "type": "integer"
+                }
+            }
+        },
+        "types.UserExperience": {
+            "type": "object",
+            "properties": {
+                "attachment": {
+                    "description": "学历证明附件",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "education_major": {
+                    "description": "教育专业",
+                    "type": "string"
+                },
+                "education_mode": {
+                    "description": "教育模式:全日制、非全日制、自学考试、成人教育/函授、网络/远程教育",
+                    "type": "string"
+                },
+                "end_date": {
+                    "description": "经历结束日期",
+                    "type": "string"
+                },
+                "identity": {
+                    "description": "经历中的身份：用于教育经历中的学位、工作经历中的职位、项目经历中的身份",
+                    "type": "string"
+                },
+                "start_date": {
+                    "description": "经历开始日期",
+                    "type": "string"
+                },
+                "subject": {
+                    "description": "经历主体",
+                    "type": "string"
+                },
+                "type": {
+                    "description": "经历过类型（1：教育经历，2：工作经历，3：项目经历）",
+                    "type": "integer"
+                },
+                "work_mode": {
+                    "description": "工作模式：全职、兼职、实习、外包/劳务派遣",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserItem": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "description": "账号",
+                    "type": "string"
+                },
+                "account_status": {
+                    "description": "禁用状态（1：正常，2：禁用）",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "description": "用户头像",
+                    "type": "string"
+                },
+                "block_status": {
+                    "description": "拉黑状态（1：未拉黑，2：已拉黑）",
+                    "type": "integer"
+                },
+                "contact": {
+                    "description": "联系方式",
+                    "type": "string"
+                },
+                "e_id": {
+                    "description": "用户当前切换的企业",
+                    "type": "integer"
+                },
+                "education_experience": {
+                    "description": "教育经历",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.UserExperience"
+                    }
+                },
+                "gender": {
+                    "description": "性别，0：保密；1：男；2：女",
+                    "type": "integer"
+                },
+                "graduated_school": {
+                    "description": "毕业学院",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户ID",
+                    "type": "integer"
+                },
+                "introduction": {
+                    "description": "个人简介",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "用户名称",
+                    "type": "string"
+                },
+                "p_id": {
+                    "description": "用户当前切换的园区",
+                    "type": "integer"
+                },
+                "phone_number": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "profession": {
+                    "description": "职业",
+                    "type": "string"
+                },
+                "project_experience": {
+                    "description": "项目经历",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.UserExperience"
+                    }
+                },
+                "residence": {
+                    "description": "居住地",
+                    "type": "string"
+                },
+                "roles": {
+                    "description": "用户角色",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.UserRole"
+                    }
+                },
+                "skills": {
+                    "description": "核心技能",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "verification_status": {
+                    "description": "实名认证状态",
+                    "type": "integer"
+                },
+                "work_experience": {
+                    "description": "工作经历",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/types.UserExperience"
+                    }
+                },
+                "work_years": {
+                    "description": "工作年限",
+                    "type": "integer"
+                }
+            }
+        },
+        "types.UserLoginReq": {
+            "type": "object",
+            "required": [
+                "code",
+                "phone_number"
+            ],
+            "properties": {
+                "code": {
+                    "description": "验证码",
+                    "type": "string"
+                },
+                "phone_number": {
+                    "description": "账号",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserLoginResp": {
+            "type": "object",
+            "properties": {
+                "expires_at": {
+                    "description": "过期时间",
+                    "type": "integer"
+                },
+                "token": {
+                    "description": "token",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserRegisterReq": {
+            "type": "object",
+            "required": [
+                "code",
+                "phone_number"
+            ],
+            "properties": {
+                "code": {
+                    "description": "验证码",
+                    "type": "string"
+                },
+                "phone_number": {
+                    "description": "账号",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserRole": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "description": "角色key，(enterprise_staff：企业用户角色，enterprise_office：企业行政角色，enterprise_personnel：企业人力角色，enterprise_accounting：企业财务角色，enterprise_supervisor：企业管理员角色，campus_student：学院学生角色，campus_teacher：学院教师角色，campus_admin：学院管理员角色，tourist：访客，visitor：游客)",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "角色名称",
+                    "type": "string"
+                }
+            }
+        },
+        "types.UserVerificationReq": {
+            "type": "object",
+            "required": [
+                "id_card",
+                "name"
+            ],
+            "properties": {
+                "id_card": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.PostSendSMSCodeReq": {
+            "type": "object",
+            "required": [
+                "phone_number"
+            ],
+            "properties": {
+                "phone_number": {
+                    "description": "账号",
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

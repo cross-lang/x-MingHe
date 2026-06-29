@@ -1,0 +1,75 @@
+# Git 相关
+.git
+.gitignore
+.gitattributes
+
+# 文档
+README.md
+CHANGELOG.md
+LICENSE
+docs/
+*.md
+
+# 开发工具配置
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 测试和覆盖率
+*_test.go
+coverage.out
+coverage.html
+testdata/
+
+# 临时文件和目录
+tmp/
+bin/
+*.log
+*.tmp
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 构建产物
+*.exe
+*.dll
+*.so
+*.dylib
+
+# 环境配置（除了配置文件本身）
+.env
+.env.local
+.env.*.local
+
+# Air 配置
+.air.toml
+tmp/
+
+# Makefile 和脚本（构建时不需要）
+Makefile
+scripts/
+build.sh
+
+# Docker 相关
+docker-compose*.yml
+.dockerignore
+
+# CI/CD 配置
+.github/
+.gitlab-ci.yml
+.travis.yml
+Jenkinsfile
+
+# IDE 配置
+.vscode/
+.idea/
+*.iml
+
+# 其他
+logs/
+*.bak
+*.old

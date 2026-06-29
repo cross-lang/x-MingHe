@@ -1,0 +1,87 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: minghe-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+      MYSQL_DATABASE: minghe_portal_dev
+      MYSQL_USER: minghe
+      MYSQL_PASSWORD: minghe123456
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-dev-data:/var/lib/mysql
+      - ./scripts:/docker-entrypoint-initdb.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --default-authentication-plugin=mysql_native_password
+      - --general-log=1
+      - --general-log-file=/var/log/mysql/general.log
+    networks:
+      - minghe-dev-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: minghe-redis-dev
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-dev-data:/data
+    command: redis-server --appendonly yes --requirepass redis123456 --loglevel debug
+    networks:
+      - minghe-dev-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # MingHe Portal 应用
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: builder
+    container_name: minghe-portal-dev
+    restart: unless-stopped
+    ports:
+      - "8088:8088"
+      - "4000:4000" # 调试端口
+    volumes:
+      - .:/app
+      - /app/tmp # 排除 tmp 目录
+      - /app/bin # 排除 bin 目录
+    environment:
+      - TZ=Asia/Shanghai
+      - DEBUG=true
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - minghe-dev-network
+    command: go run ./cmd/server -c config_local.yaml
+
+volumes:
+  mysql-dev-data:
+    driver: local
+  redis-dev-data:
+    driver: local
+
+networks:
+  minghe-dev-network:
+    driver: bridge

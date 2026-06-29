@@ -1,0 +1,683 @@
+basePath: /
+definitions:
+  ginx.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
+      request_id:
+        type: string
+      timestamp:
+        type: integer
+    type: object
+  types.DetailDeactivateUserCheckResp:
+    properties:
+      can_deactivate:
+        description: 是否允许注销
+        type: boolean
+      items:
+        description: 未通过的指标列表，每个字符串表示一个未通过的指标key
+        items:
+          type: string
+        type: array
+    type: object
+  types.EnterpriseItem:
+    properties:
+      category:
+        description: 类目
+        items:
+          type: integer
+        type: array
+      contact:
+        description: 类型方式
+        items:
+          type: string
+        type: array
+      created_at:
+        description: 创建时间
+        type: string
+      description:
+        description: 企业简介
+        type: string
+      full_name:
+        description: 企业全称
+        type: string
+      icon:
+        description: 企业icon
+        type: string
+      id:
+        description: 企业ID
+        type: integer
+      images:
+        description: 背景图片
+        items:
+          type: string
+        type: array
+      labels:
+        description: 标签
+        items:
+          type: string
+        type: array
+      lease_time:
+        description: 时间
+        type: string
+      short_name:
+        description: 企业简称
+        type: string
+      top:
+        description: 是否置顶
+        type: integer
+      type:
+        description: 企业类型，（1：企业，2：学院）
+        type: integer
+      updated_at:
+        description: 修改时间
+        type: string
+      website:
+        description: 企业官网
+        items:
+          type: string
+        type: array
+    type: object
+  types.EnterpriseList:
+    properties:
+      count:
+        type: integer
+      items:
+        items:
+          $ref: '#/definitions/types.EnterpriseItem'
+        type: array
+    type: object
+  types.PostJoinEnterpriseReq:
+    properties:
+      code:
+        description: 企业入驻码
+        type: string
+      enterprise_id:
+        description: 企业ID
+        type: integer
+    required:
+    - code
+    - enterprise_id
+    type: object
+  types.UserExperience:
+    properties:
+      attachment:
+        description: 学历证明附件
+        items:
+          type: string
+        type: array
+      education_major:
+        description: 教育专业
+        type: string
+      education_mode:
+        description: 教育模式:全日制、非全日制、自学考试、成人教育/函授、网络/远程教育
+        type: string
+      end_date:
+        description: 经历结束日期
+        type: string
+      identity:
+        description: 经历中的身份：用于教育经历中的学位、工作经历中的职位、项目经历中的身份
+        type: string
+      start_date:
+        description: 经历开始日期
+        type: string
+      subject:
+        description: 经历主体
+        type: string
+      type:
+        description: 经历过类型（1：教育经历，2：工作经历，3：项目经历）
+        type: integer
+      work_mode:
+        description: 工作模式：全职、兼职、实习、外包/劳务派遣
+        type: string
+    type: object
+  types.UserItem:
+    properties:
+      account:
+        description: 账号
+        type: string
+      account_status:
+        description: 禁用状态（1：正常，2：禁用）
+        type: integer
+      avatar:
+        description: 用户头像
+        type: string
+      block_status:
+        description: 拉黑状态（1：未拉黑，2：已拉黑）
+        type: integer
+      contact:
+        description: 联系方式
+        type: string
+      e_id:
+        description: 用户当前切换的企业
+        type: integer
+      education_experience:
+        description: 教育经历
+        items:
+          $ref: '#/definitions/types.UserExperience'
+        type: array
+      gender:
+        description: 性别，0：保密；1：男；2：女
+        type: integer
+      graduated_school:
+        description: 毕业学院
+        type: string
+      id:
+        description: 用户ID
+        type: integer
+      introduction:
+        description: 个人简介
+        type: string
+      name:
+        description: 用户名称
+        type: string
+      p_id:
+        description: 用户当前切换的园区
+        type: integer
+      phone_number:
+        description: 手机号
+        type: string
+      profession:
+        description: 职业
+        type: string
+      project_experience:
+        description: 项目经历
+        items:
+          $ref: '#/definitions/types.UserExperience'
+        type: array
+      residence:
+        description: 居住地
+        type: string
+      roles:
+        description: 用户角色
+        items:
+          $ref: '#/definitions/types.UserRole'
+        type: array
+      skills:
+        description: 核心技能
+        items:
+          type: string
+        type: array
+      verification_status:
+        description: 实名认证状态
+        type: integer
+      work_experience:
+        description: 工作经历
+        items:
+          $ref: '#/definitions/types.UserExperience'
+        type: array
+      work_years:
+        description: 工作年限
+        type: integer
+    type: object
+  types.UserLoginReq:
+    properties:
+      code:
+        description: 验证码
+        type: string
+      phone_number:
+        description: 账号
+        type: string
+    required:
+    - code
+    - phone_number
+    type: object
+  types.UserLoginResp:
+    properties:
+      expires_at:
+        description: 过期时间
+        type: integer
+      token:
+        description: token
+        type: string
+    type: object
+  types.UserRegisterReq:
+    properties:
+      code:
+        description: 验证码
+        type: string
+      phone_number:
+        description: 账号
+        type: string
+    required:
+    - code
+    - phone_number
+    type: object
+  types.UserRole:
+    properties:
+      key:
+        description: 角色key，(enterprise_staff：企业用户角色，enterprise_office：企业行政角色，enterprise_personnel：企业人力角色，enterprise_accounting：企业财务角色，enterprise_supervisor：企业管理员角色，campus_student：学院学生角色，campus_teacher：学院教师角色，campus_admin：学院管理员角色，tourist：访客，visitor：游客)
+        type: string
+      name:
+        description: 角色名称
+        type: string
+    type: object
+  types.UserVerificationReq:
+    properties:
+      id_card:
+        type: string
+      name:
+        type: string
+    required:
+    - id_card
+    - name
+    type: object
+  user.PostSendSMSCodeReq:
+    properties:
+      phone_number:
+        description: 账号
+        type: string
+    required:
+    - phone_number
+    type: object
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: 明河（MingHe）门户系统后端的 API 文档
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: 明河（MingHe）门户系统后端
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: 检查服务及其依赖组件的健康状态
+      parameters:
+      - default: false
+        description: 是否返回详细信息
+        in: query
+        name: detailed
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.Response'
+      summary: 健康检查
+      tags:
+      - Health
+  /info:
+    get:
+      description: 获取服务当前状态和系统信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.Response'
+  /live:
+    get:
+      description: 检查服务是否正在运行
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.Response'
+      summary: 存活检查
+      tags:
+      - Health
+  /ready:
+    get:
+      description: 检查服务是否准备好接收流量
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/ginx.Response'
+      summary: 就绪检查
+      tags:
+      - Health
+  /v1/enterprises/{enterprise_id}/detail:
+    get:
+      parameters:
+      - description: 企业ID
+        in: path
+        name: enterprise_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查询企业详情成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.EnterpriseItem'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查询企业详情
+      tags:
+      - 企业
+  /v1/enterprises/join:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户加入企业参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.PostJoinEnterpriseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户加入企业成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户加入企业
+      tags:
+      - 企业
+  /v1/enterprises/list:
+    get:
+      parameters:
+      - description: 园区ID
+        in: path
+        name: park_id
+        required: true
+        type: integer
+      - description: 企业类型（1：企业，2：学院）
+        in: query
+        name: type
+        required: true
+        type: integer
+      - description: 类目
+        in: query
+        name: category
+        type: integer
+      - description: 每页数据量
+        in: query
+        name: size
+        required: true
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取指定园区的企业列表成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.EnterpriseList'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定园区的企业列表
+      tags:
+      - 企业
+  /v1/users/check/deactivate/detail:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查询用户注销准入评估结果成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.DetailDeactivateUserCheckResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查询用户注销准入评估结果接口
+      tags:
+      - 用户
+  /v1/users/deactivate:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户注销成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.DetailDeactivateUserCheckResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户注销接口
+      tags:
+      - 用户
+  /v1/users/detail:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 查询用户详情成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.UserItem'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查询用户详情接口
+      tags:
+      - 用户
+  /v1/users/enterprises/list:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 获取用户入驻的企业列表成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/types.EnterpriseItem'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 查询用户入驻的企业列表
+      tags:
+      - 用户
+  /v1/users/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户登录请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserLoginReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登录成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.UserLoginResp'
+              type: object
+      summary: 用户登录接口
+      tags:
+      - 用户
+  /v1/users/login/code/send:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user.PostSendSMSCodeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 短信验证码发送成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 发送登录短信验证码
+      tags:
+      - 用户
+  /v1/users/logout:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 登出成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户登出接口
+      tags:
+      - 用户
+  /v1/users/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户注册请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserRegisterReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户注册成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/types.UserLoginResp'
+              type: object
+      summary: 用户注册接口
+      tags:
+      - 用户
+  /v1/users/register/code/send:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/user.PostSendSMSCodeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 短信验证码发送成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      summary: 发送注册短信验证码
+      tags:
+      - 用户
+  /v1/users/verification:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户注册请求参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/types.UserVerificationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户实名认证成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/ginx.Response'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 用户实名认证
+      tags:
+      - 用户
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
